@@ -6,7 +6,7 @@ import RelatedProduct from "./RelatedProduct";
 const Productdetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState();
-  const url = "http://localhost:1000/api";
+  const url = "https://mern-ecommerce-api-rqy5.onrender.com/api";
   useEffect(() => {
     const fetchProducts = async () => {
       const api = await axios.get(`${url}/product/${id}`, {
