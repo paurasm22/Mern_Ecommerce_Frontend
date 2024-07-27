@@ -3,7 +3,8 @@ import AppContext from "../../Context/AppContext";
 import { Link, useNavigate } from "react-router-dom";
 
 const ShowProduct = () => {
-  const { filteredData, addToCart } = useContext(AppContext);
+  const { filteredData, addToCart, admin, deleteProduct } =
+    useContext(AppContext);
   const navigate = useNavigate();
 
   const handleInfoClick = () => {
@@ -46,21 +47,39 @@ const ShowProduct = () => {
                       <button href="#" className="btn btn-primary mx-3">
                         ₹ {product.price}
                       </button>
-                      <button
-                        onClick={() => {
-                          addToCart(
-                            product._id,
-                            product.title,
-                            product.price,
-                            product.qty,
-                            product.imgsrc
-                          );
-                        }}
-                        href="#"
-                        className="btn btn-warning"
-                      >
-                        Add To Cart
-                      </button>
+                      {!admin && (
+                        <>
+                          <button
+                            onClick={() => {
+                              addToCart(
+                                product._id,
+                                product.title,
+                                product.price,
+                                product.qty,
+                                product.imgsrc
+                              );
+                            }}
+                            href="#"
+                            className="btn btn-warning"
+                          >
+                            Add To Cart
+                          </button>
+                        </>
+                      )}
+                      {admin && (
+                        <>
+                          <button
+                            onClick={() => {
+                              deleteProduct(product._id);
+                            }}
+                            className="btn btn-danger"
+                          >
+                            <span className="material-symbols-outlined ">
+                              delete
+                            </span>
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>

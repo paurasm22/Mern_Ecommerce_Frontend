@@ -3,18 +3,34 @@ import AppContext from "../../Context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const Address = () => {
   const { shippingAddress, useraddress } = useContext(AppContext);
   const [name, setName] = useState("");
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
-  const [pincode, setPincode] = useState();
-  const [phnum, setPhnum] = useState();
+  const [pincode, setPincode] = useState("");
+  const [phnum, setPhnum] = useState("");
   const [address, setAddress] = useState("");
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      !name ||
+      !country ||
+      !state ||
+      !city ||
+      !pincode ||
+      !phnum ||
+      !address
+    ) {
+      toast.error("Please fill in all fields!");
+      return;
+    }
+
     console.log({
       fullname: name,
       country: country,
@@ -24,6 +40,7 @@ const Address = () => {
       phoneNumber: phnum,
       address: address,
     });
+
     setAddress("");
     setName("");
     setCountry("");
@@ -42,16 +59,16 @@ const Address = () => {
       phnum
     );
     console.log(result);
-    if (result.data.success == true) {
+    if (result.data.success === true) {
       navigate("/checkout");
     }
   };
+
   return (
     <>
       <div
         className="container my-10"
         style={{
-          // width: "600px",
           margin: "auto",
           marginTop: "60px",
           border: "4px solid white",
@@ -64,39 +81,40 @@ const Address = () => {
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="mb-3 col-md-4">
-              <label htmlFor="exampleInputName" className="form-label">
+              <label htmlFor="fullName" className="form-label">
                 Full Name
               </label>
               <input
                 type="text"
                 className="form-control"
-                id="exampleInputName"
-                aria-describedby="emailHelp"
+                id="fullName"
+                required
                 onChange={(e) => setName(e.target.value)}
                 value={name}
               />
             </div>
             <div className="mb-3 col-md-4">
-              <label htmlFor="exampleInputEmail1" className="form-label">
+              <label htmlFor="country" className="form-label">
                 Country
               </label>
               <input
                 type="text"
                 className="form-control"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
+                id="country"
+                required
                 onChange={(e) => setCountry(e.target.value)}
                 value={country}
               />
             </div>
             <div className="mb-3 col-md-4">
-              <label htmlFor="exampleInputPassword1" className="form-label">
+              <label htmlFor="state" className="form-label">
                 State
               </label>
               <input
                 type="text"
                 className="form-control"
-                id="exampleInputPassword1"
+                id="state"
+                required
                 onChange={(e) => setState(e.target.value)}
                 value={state}
               />
@@ -104,55 +122,59 @@ const Address = () => {
           </div>
           <div className="row">
             <div className="mb-3 col-md-4">
-              <label htmlFor="exampleInputName" className="form-label">
+              <label htmlFor="city" className="form-label">
                 City
               </label>
               <input
                 type="text"
                 className="form-control"
-                id="exampleInputName"
-                aria-describedby="emailHelp"
+                id="city"
+                required
                 onChange={(e) => setCity(e.target.value)}
                 value={city}
               />
             </div>
             <div className="mb-3 col-md-4">
-              <label htmlFor="exampleInputEmail1" className="form-label">
+              <label htmlFor="pincode" className="form-label">
                 Pin Code
               </label>
               <input
                 type="text"
                 className="form-control"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
+                id="pincode"
+                required
+                pattern="\d{6}" /* Assuming pincode should be a 6-digit number */
                 onChange={(e) => setPincode(e.target.value)}
                 value={pincode}
               />
             </div>
             <div className="mb-3 col-md-4">
-              <label htmlFor="exampleInputPassword1" className="form-label">
+              <label htmlFor="phoneNumber" className="form-label">
                 Phone Number
               </label>
               <input
                 type="text"
                 className="form-control"
-                id="exampleInputPassword1"
+                id="phoneNumber"
+                required
+                pattern="\d{10}" /* Assuming phone number should be a 10-digit number */
                 onChange={(e) => setPhnum(e.target.value)}
                 value={phnum}
               />
             </div>
           </div>
           <div className="row">
-            <div class="mb-3">
-              <label for="exampleFormControlTextarea1" class="form-label">
-                Address , Near-by
+            <div className="mb-3">
+              <label htmlFor="address" className="form-label">
+                Address, Near-by
               </label>
               <textarea
+                id="address"
+                className="form-control"
+                rows="3"
+                required
                 onChange={(e) => setAddress(e.target.value)}
                 value={address}
-                class="form-control"
-                id="exampleFormControlTextarea1"
-                rows="3"
               ></textarea>
             </div>
           </div>
@@ -168,13 +190,14 @@ const Address = () => {
               onClick={() => {
                 navigate("/checkout");
               }}
-              type="submit"
+              type="button"
               className="btn btn-warning Register Here my-3"
             >
               Use Old Address
             </button>
           </div>
         )}
+        <ToastContainer />
       </div>
     </>
   );

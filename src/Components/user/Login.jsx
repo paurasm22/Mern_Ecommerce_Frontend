@@ -3,23 +3,21 @@ import AppContext from "../../Context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const Login = () => {
   const { login } = useContext(AppContext);
 
   const [passwd, setPasswd] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ password: passwd, email: email });
-    // console.log(email);
-    // console.log(passwd);
     const result = await login(email, passwd);
-    // alert("Form has been Submitted !  ");
     setEmail("");
-
     setPasswd("");
-    if (result.success === true) {
+
+    if (result.success) {
       navigate("/");
       toast.success(result.message, {
         position: "top-center",
@@ -46,6 +44,7 @@ const Login = () => {
       });
     }
   };
+
   return (
     <>
       <div
@@ -94,6 +93,7 @@ const Login = () => {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </>
   );
 };

@@ -15,6 +15,7 @@ import Address from "./Components/user/Address";
 import Checkout from "./Components/user/Checkout";
 import OrderConmfirmation from "./Components/user/OrderConmfirmation";
 import Info from "./Components/Info";
+import Admin from "./Components/Admin";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/orderconfirmation" element={<OrderConmfirmation />} />
           <Route path="/info" element={<Info />} />
+          <Route path={"/admin"} element={<Admin />} />
         </Routes>
       </Router>
     </>

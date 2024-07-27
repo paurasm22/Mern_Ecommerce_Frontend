@@ -5,9 +5,12 @@ import { useEffect } from "react";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const AppState = (props) => {
+  const [alladminOrders, setAllOrders] = useState();
   const data = 10;
-  // const url = "http://localhost:1000/api";
-  const url = "https://mern-ecommerce-api-rqy5.onrender.com/api";
+  const [allUsers, setAllUsers] = useState();
+  const [admin, setAdmin] = useState(false);
+  const url = "http://localhost:1000/api";
+  // const url = "https://mern-ecommerce-api-rqy5.onrender.com/api";
   const [token, setToken] = useState("");
   const [userDetails, setuserDetails] = useState();
   const [isAuthenticated, setisAuthenticated] = useState(false);
@@ -50,7 +53,7 @@ const AppState = (props) => {
       transition: Bounce,
     });
     return api;
-    // setCart(api.data.cart);
+    setCart(api.data.cart);
     // console.log("USer cart", api.data.cart);
   };
   useEffect(() => {
@@ -69,6 +72,17 @@ const AppState = (props) => {
     userProfile();
     getAddress();
     getUserorders();
+    gatAllUsers();
+    allOrders();
+    const savedAdmin = localStorage.getItem("admin");
+    try {
+      if (savedAdmin) {
+        setAdmin(JSON.parse(savedAdmin));
+      }
+    } catch (error) {
+      console.error("Error parsing savedAdmin from localStorage:", error);
+      setAdmin(false); // Or any default value you prefer
+    }
   }, [token]);
 
   useEffect(() => {
@@ -120,6 +134,9 @@ const AppState = (props) => {
     );
 
     console.log("user Login", api.data);
+    console.log("Is admin", api.data.admin);
+    localStorage.setItem("admin", api.data.admin);
+    setAdmin(api.data.admin);
     setToken(api.data.token);
     localStorage.setItem("token", api.data.token);
     setisAuthenticated(true);
@@ -135,6 +152,7 @@ const AppState = (props) => {
     setisAuthenticated(false);
     setToken("");
     localStorage.removeItem("token");
+    localStorage.removeItem("admin");
     toast.success("Logged Out Sucessfully !! ", {
       position: "top-center",
       autoClose: 3000,
@@ -146,6 +164,7 @@ const AppState = (props) => {
       theme: "colored",
       transition: Bounce,
     });
+    window.location.reload();
   };
 
   // user profile
@@ -157,7 +176,7 @@ const AppState = (props) => {
       },
       withCredentials: true,
     });
-    console.log(api.data.user);
+    // console.log(api.data.user);
     setuserDetails(api.data.user);
   };
 
@@ -305,6 +324,91 @@ const AppState = (props) => {
     console.log("User order", api.data);
     setUserOrder(api.data);
   };
+
+  // admin exclusives
+
+  const deleteProduct = async (id) => {
+    const api = await axios.delete(`${url}/product/${id}`, {
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      withCredentials: true,
+    });
+    toast.success(api.data.message, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Bounce,
+    });
+    window.location.reload();
+    // setProducts(api.data.products);
+  };
+
+  // add products admin side
+  const addProducts = async (title, Description, price, category, imgSrc) => {
+    const api = await axios.post(
+      `${url}/product/add`,
+      {
+        title: title,
+        description: Description,
+        price: price,
+        category: category,
+        qty: 1,
+        imgsrc: imgSrc,
+      },
+      {
+        headers: {
+          "Content-Type": "Application/json",
+          // Auth: token,
+        },
+        withCredentials: true,
+      }
+    );
+    // console.log("My Cart", api);
+    toast.success(api.data.message, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Bounce,
+    });
+  };
+
+  const gatAllUsers = async () => {
+    const api = await axios.get(`${url}/user/all`, {
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      withCredentials: true,
+    });
+    console.log("All Users", api?.data);
+    setAllUsers(api?.data);
+  };
+
+  // get all orders
+
+  const allOrders = async () => {
+    const api = await axios.get(`${url}/payment/allorders`, {
+      headers: {
+        "Content-Type": "Application/json",
+        // Auth: token,
+      },
+      withCredentials: true,
+    });
+    console.log("All the orders : ", api.data);
+    setAllOrders(api.data);
+    // console.log(api.data.user);
+    // setuserDetails(api.data.user);
+  };
   return (
     <AppContext.Provider
       value={{
@@ -330,6 +434,11 @@ const AppState = (props) => {
         getUserorders,
         userOrder,
         getUserCart,
+        admin,
+        deleteProduct,
+        addProducts,
+        allUsers,
+        alladminOrders,
       }}
     >
       {props.children}

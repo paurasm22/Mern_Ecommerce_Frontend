@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import AppContext from "../../Context/AppContext";
-// import { addToCart } from "../../../../API/Controller/cart";
+import { addToCart } from "../../../../API/Controller/cart";
 import { Link, useNavigate } from "react-router-dom";
 import TableProducts from "../TableProducts";
 import axios from "axios";

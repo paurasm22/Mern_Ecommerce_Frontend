@@ -1,9 +1,11 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import RelatedProduct from "./RelatedProduct";
+import AppContext from "../../Context/AppContext";
 
 const Productdetail = () => {
+  const { addToCart } = useContext(AppContext);
   const { id } = useParams();
   const [product, setProduct] = useState();
   const url = "https://mern-ecommerce-api-rqy5.onrender.com/api";
@@ -51,13 +53,25 @@ const Productdetail = () => {
             </p>
             <h1> ₹ {product?.price}</h1>
             <div className="my-5">
-              <button
+              {/* <button
                 className="btn btn-danger mx-3"
                 style={{ fontWeight: "700" }}
               >
                 Buy Now
-              </button>
-              <button className="btn btn-warning" style={{ fontWeight: "700" }}>
+              </button> */}
+              <button
+                className="btn btn-warning"
+                onClick={() => {
+                  addToCart(
+                    product._id,
+                    product.title,
+                    product.price,
+                    product.qty,
+                    product.imgsrc
+                  );
+                }}
+                style={{ fontWeight: "700" }}
+              >
                 Add to Cart
               </button>
             </div>

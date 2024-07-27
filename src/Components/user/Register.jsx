@@ -50,6 +50,7 @@ const Register = () => {
               aria-describedby="emailHelp"
               onChange={(e) => setName(e.target.value)}
               value={name}
+              required
             />
           </div>
           <div className="mb-3">
@@ -57,6 +58,7 @@ const Register = () => {
               Email address
             </label>
             <input
+              required
               type="email"
               className="form-control"
               id="exampleInputEmail1"
@@ -73,6 +75,7 @@ const Register = () => {
               type="password"
               className="form-control"
               id="exampleInputPassword1"
+              required
               onChange={(e) => setPasswd(e.target.value)}
               value={passwd}
             />
