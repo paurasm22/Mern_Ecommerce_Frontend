@@ -9,8 +9,8 @@ const AppState = (props) => {
   const data = 10;
   const [allUsers, setAllUsers] = useState();
   const [admin, setAdmin] = useState(false);
-  // const url = "http://localhost:1000/api";
-  const url = "https://mern-ecommerce-api-rqy5.onrender.com/api";
+  const url = "http://localhost:1000/api";
+  // const url = "https://mern-ecommerce-api-rqy5.onrender.com/api";
   const [token, setToken] = useState("");
   const [userDetails, setuserDetails] = useState();
   const [isAuthenticated, setisAuthenticated] = useState(false);
@@ -64,7 +64,7 @@ const AppState = (props) => {
         },
         withCredentials: true,
       });
-      console.log(api.data.products);
+      // console.log(api.data.products);
       setProducts(api.data.products);
       setFilteredData(api.data.products);
     };
